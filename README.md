@@ -27,7 +27,7 @@ python -m pip install -r requirements.txt
 e.g:
 
 ```text
-  1 0 * * 1 /path/to/parkanizerer/main.py >> /path/to/parkanizerer/parkanizerer.log
+  1 0 * * 1 /path/to/parkanizerer/main.py &>> /path/to/parkanizerer/parkanizerer.log
 ```
 This will run the script on each monday one minute after midnight and it'll book the selected desk for the next week.
 
