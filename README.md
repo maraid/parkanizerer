@@ -1,11 +1,11 @@
 
 # Parkanizerer
 
-_A simple tool that books an office desk on [parkanizer.com](https://share.parkanizer.com/)._
+_A simple tool that books an office desk on [tidaro.com](https://www.tidaro.com) ([parkanizer.com](https://share.parkanizer.com/) before)._
 
 Parkanizer only let's you book a desk 1 week ahead. Using crontab, this script will run on each weekday when you usually go to the office just after midnight and books the desk for a week later.
 
-__Your password will be stored as clear text.__ So make sure that you don't use one on parkanizer that isn't used elsewhere.
+__Your password will be stored as clear text.__ So make sure that you use one on parkanizer that isn't used elsewhere.
 
 Don't forget to release your desk if you decide not to go to the office.
 
