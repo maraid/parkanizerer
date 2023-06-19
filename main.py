@@ -23,19 +23,13 @@ def one_week_from_now():
 def get_next_week_days():
     result = []
     
-    if not config["days_of_week"]:
+    if not config.get("days_of_week", []):
         result.append(one_week_from_now())
 
     for dow in config["days_of_week"]:
-        next_day = datetime.today()
-        
-        days_left = dow - next_day.weekday()
-        
-        if days_left <= 0:
-            days_left += 7
-            
-        next_day += timedelta(days=days_left)
-        
+        today = datetime.today()
+        days_left = (dow - today.weekday()) % 7
+        next_day = today + datetime.timedelta(days=days_left)
         result.append(next_day.strftime(r"%Y-%m-%d"))
 
     return result
@@ -47,7 +41,7 @@ def fetch_zone_id(zone_name):
     return next(zone["id"] for zone in r.json()["zones"] if zone["name"] == zone_name)
 
 
-def fetch_desk_id(desk_name, zone_id, days_to_take):
+def fetch_desk_id(desk_name, zone_id, day_to_take):
     r = session.post(
         PARKANIZER_URI + "/api/employee-desks/desk-marketplace/get-marketplace-desk-zone-map",
         json={
