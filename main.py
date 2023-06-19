@@ -46,7 +46,7 @@ def fetch_desk_id(desk_name, zone_id, day_to_take):
         PARKANIZER_URI + "/api/employee-desks/desk-marketplace/get-marketplace-desk-zone-map",
         json={
             "deskZoneId": zone_id, 
-            "date": days_to_take
+            "date": day_to_take
         }
     )
     return next(desk for desk in r.json()["mapOrNull"]["desks"]
