@@ -25,12 +25,12 @@ def get_next_week_days():
     
     if not config.get("days_of_week", []):
         result.append(one_week_from_now())
-
-    for dow in config["days_of_week"]:
-        today = datetime.today()
-        days_left = (dow - today.weekday()) % 7
-        next_day = today + datetime.timedelta(days=days_left)
-        result.append(next_day.strftime(r"%Y-%m-%d"))
+    else:
+        for dow in config["days_of_week"]:
+            today = datetime.today()
+            days_left = (dow - today.weekday()) % 7
+            next_day = today + datetime.timedelta(days=days_left)
+            result.append(next_day.strftime(r"%Y-%m-%d"))
 
     return result
 
