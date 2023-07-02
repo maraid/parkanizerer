@@ -28,8 +28,8 @@ def get_next_week_days():
     else:
         for dow in config["days_of_week"]:
             today = datetime.today()
-            days_left = (dow - today.weekday()) % 7
-            next_day = today + datetime.timedelta(days=days_left)
+            days_left = (dow - today.weekday()) % 7 + 1
+            next_day = today + timedelta(days=days_left)
             result.append(next_day.strftime(r"%Y-%m-%d"))
 
     return result
