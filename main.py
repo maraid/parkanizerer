@@ -28,7 +28,12 @@ def get_next_week_days():
     else:
         for dow in config["days_of_week"]:
             today = datetime.today()
-            days_left = (dow - today.weekday()) % 7 + 1
+            days_left = (dow - today.weekday()) % 7
+
+            # If today is the same day as the day of week to book, book for next week
+            if days_left == 0:
+                days_left = 7
+
             next_day = today + timedelta(days=days_left)
             result.append(next_day.strftime(r"%Y-%m-%d"))
 
