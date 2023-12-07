@@ -1,0 +1,8 @@
+[parkanizer]
+user =  "someone@example.com"
+password =  "SomePassword"
+
+[booking]
+zone = "<Zone Name>"
+desk = "<Desk Name>"
+weekdays_to_book = ["Monday", "Wednesday"]  # optional, books today if missing
