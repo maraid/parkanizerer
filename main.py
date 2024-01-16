@@ -2,7 +2,7 @@
 
 import requests
 from datetime import datetime
-import tomllib
+import tomllib as toml
 from auth import get_token
 import os
 from unicodedata import normalize
@@ -22,7 +22,7 @@ def str_to_date(date_str: str) -> datetime:
 def load_config():
     script_dir = os.path.dirname(__file__)
     with open(os.path.join(script_dir, "config.toml"), "rb") as f:
-        data = tomllib.load(f)
+        data = toml.load(f)
     data["wanted"]["weekdays"] = [d.lower() for d in data["wanted"].get("weekdays", [])]
     return data
 
@@ -74,12 +74,16 @@ def book_desk(zone_id: str, desk_id: str, day: str):
     )
     if message := response.json().get("message"):
         print(message)
-    elif response.json().get("receivedDeskOrNull"):
+    elif response.json().get("receivedDeskOrNull") is not None:
         print(
             f"Booked desk [{config['wanted']['desk']}] "
             f"in zone [{config['wanted']['zone']}] "
             f"for {day}."
         )
+    elif response.json().get("receivedDeskOrNull") is None:
+        print("Failed to book desk. It was already taken")
+    else:
+        print(f"Failed to book desk. Response: {response.text}")
 
 
 if __name__ == "__main__":
@@ -104,7 +108,7 @@ if __name__ == "__main__":
         days_to_book = [
             date_to_str(day)
             for day in available_days_of_wanted_zone
-            if ((day.day - datetime.today().day) % 7) == 0
+            if ((day.day + 1 - datetime.today().day) % 7) == 0
         ]
 
     print("days_to_book", days_to_book)
