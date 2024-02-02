@@ -1,4 +1,5 @@
 import io
+import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -104,7 +105,22 @@ class Desk(ApiItemWithPK):
         )
 
     def take(self, selected_date=datetime.today()):
-        parkanizer.take_desk(self._zone.id, self.id, selected_date)
+        response = parkanizer.take_desk(self._zone.id, self.id, selected_date)
+        if message := response.get("message"):
+            if message == "An error has occurred.":
+                logging.info("Failed to book desk. It might have been mine already.")
+            else:
+                logging.info(message)
+        elif response.get("receivedDeskOrNull") is not None:
+            logging.info(
+                f"Booked desk [{self.name}] "
+                f"in zone [{self._zone.name}] "
+                f"for {utils.date_to_str(selected_date)}."
+            )
+        elif response.get("receivedDeskOrNull") is None:
+            logging.info("Failed to book desk. It was already taken")
+        else:
+            logging.error(f"Failed to book desk. Response: {response.text}")
 
 
 class DeskManager(ApiItemWithPKManagerBase[Desk]):
