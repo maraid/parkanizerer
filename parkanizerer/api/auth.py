@@ -1,8 +1,7 @@
-import requests
 import re
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlparse
 
+import requests
 
 POLICY = "B2C_1A_Parkanizer_Login"
 PARKANIZER_LOGIN_URI = (
@@ -71,4 +70,7 @@ def get_token(username, password):
     )
     get_token_response.raise_for_status()
 
-    return "Bearer " + get_token_response.json()["accessToken"]
+    return {
+        "bearer_token": get_token_response.json()["accessToken"],
+        "refresh_token": get_token_response.cookies["refresh_token"],
+    }
