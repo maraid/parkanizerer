@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-_pychache_/
+__pycache__/
 parkanizerer/__pycache__/
 parkanizerer/api/__pycache__/
 results/

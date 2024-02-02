@@ -3,17 +3,17 @@
 import argparse
 import logging
 import pathlib
+import sys
 import tomllib
 from datetime import datetime
-
-import sys
 
 from api import utils
 from api.parkanizer_api import ParkanizerApi
 from book_desk import book_desk
 from generate_map import generate_map
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+FORMAT = "%(asctime)s %(message)s"
+logging.basicConfig(format=FORMAT, stream=sys.stdout, level=logging.INFO)
 
 ROOT_DIR = pathlib.Path(__file__).parents[1].resolve()
 DEFAULT_CONFIG_PATH = ROOT_DIR / "config.toml"
@@ -39,7 +39,9 @@ def login(config):
 
 def run_generate_map(config: dict, args):
     papi = login(config)
-    result = pathlib.Path(args.result or config["generate-map"].get("result") or DEFAULT_RESULTS_PATH)
+    result = pathlib.Path(
+        args.result or config["generate-map"].get("result") or DEFAULT_RESULTS_PATH
+    )
     generate_map(
         papi.employees, papi.zones, args.date, result, config["generate-map"]["vip"]
     )
