@@ -1,8 +1,12 @@
-__pycache__/
 .idea/
-venv/
 .vscode/
-config.json
+_pychache_/
+parkanizerer/__pycache__/
+parkanizerer/api/__pycache__/
+results/
+generated_maps/
+venv/
 config.toml
+session_secrets
 parkanizerer.log
-
+launch.ps1
