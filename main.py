@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
-import requests
-from datetime import datetime
-import tomllib as toml
-from auth import get_token
 import os
+import tomllib as toml
+from datetime import datetime
 from unicodedata import normalize
+
+import requests
+
+from auth import get_token
 
 API = "https://share.parkanizer.com/api/employee-desks/desk-marketplace"
 DATE_FORMAT = r"%Y-%m-%d"
@@ -108,7 +110,7 @@ if __name__ == "__main__":
         days_to_book = [
             date_to_str(day)
             for day in available_days_of_wanted_zone
-            if ((day.day + 1 - datetime.today().day) % 7) == 0
+            if ((day - datetime.today()).days % 7) == 6
         ]
 
     print("days_to_book", days_to_book)
