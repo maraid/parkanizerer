@@ -11,7 +11,7 @@ class ParkanizerApi:
     @property
     def myself(self) -> models.Myself:
         if self._myself is None:
-            data_dict = session.parkanizer.get_employee_reservations()
+            data_dict = session.parkanizer.get_my_context()
             self._myself = models.Myself.from_dict(data_dict)
             self._myself.reservations = models.MyReservationManager(
                 self._myself, self.zones

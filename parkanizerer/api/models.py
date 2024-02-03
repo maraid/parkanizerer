@@ -258,7 +258,7 @@ class MyReservationManager(ReservationManager):
             for d in self._fetch():
                 if d["status"] == "Reserved":
                     d.update(d["reservedDeskOrNull"])
-                    self._data.append(Reservation.from_dict(d))
+                    self._data.append(self._create_obj(d))
         return self._data
 
     def _fetch(self) -> list[dict]:

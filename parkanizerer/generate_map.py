@@ -1,13 +1,12 @@
 import logging
+import math
 import os
 import pathlib
+import sys
 from datetime import datetime
 
-import math
-import sys
-from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
-
 from api.models import EmployeeManager, Zone, ZoneManager
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 
 def generate_map(employees: EmployeeManager,
@@ -64,6 +63,7 @@ class ImageHandler:
         # Draw the map
         for m in combined_maps:
             image = m["map"].convert("RGBA")
+
             self._draw_zones(image, m["zone_list"])
             image_path = target / (m["zone_list"][0].name + ".png")
             image.save(image_path)
