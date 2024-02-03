@@ -26,8 +26,8 @@ def load_config(config_path):
     data["book-desk"]["weekdays"] = [
         d.lower() for d in data["book-desk"].get("weekdays", [])
     ]
-    data["generate-map"]["vip"] = data.get("vip", [])
-    data["generate-map"]["result"] = data.get("result", "")
+    data["generate-map"]["vip"] = data["generate-map"].get("vip", [])
+    data["generate-map"]["result"] = data["generate-map"].get("result", "")
     return data
 
 

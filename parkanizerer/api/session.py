@@ -104,7 +104,7 @@ class ParkanizerSession:
             return io.BytesIO(response.content)
 
     def get_my_context(self):
-        url = PARKANIZER_API + "get-employee-context"
+        url = PARKANIZER_API + "/get-employee-context"
         payload = {}
         return self._post(url, payload)
 
