@@ -62,27 +62,35 @@ class ImageHandler:
 
         # Draw the map
         for m in combined_maps:
-            image = m["map"].convert("RGBA")
+            # Find longest prefix (floor name)
+            zone_names = [z.name for z in m["zone_list"]]
+            for x in range(max(len(x) for x in zone_names), 0, -1):
+                partial_name_list: list[str] =  [n[:x] for n in zone_names]
+                all_same =  all(m == partial_name_list[0] for m in partial_name_list)
+                if all_same:
+                    break
+            prefix = partial_name_list[0]
 
-            self._draw_zones(image, m["zone_list"])
-            image_path = target / (m["zone_list"][0].name + ".png")
+            image = m["map"].convert("RGBA")  # conversion enables alpha channel
+            self._draw_zones(image, m["zone_list"], prefix)
+            
+            image_path = target / (prefix.rstrip() + ".png")
             image.save(image_path)
-            # logging.info(f"Created map for {zone.name} - {image_path.absolute()} ")
 
-    def _draw_zones(self, image: Image.Image, zones: list[Zone]):
-        # image.convert()
+    def _draw_zones(self, image: Image.Image, zones: list[Zone], prefix: str):
         for zone in zones:
-            self._draw_zone_name(image, zone)
+            zone_name = zone.name.removeprefix(prefix)
+            zbbox = (
+                min(d.x for d in zone.desks) * image.width,
+                min(d.y for d in zone.desks) * image.height,
+                max(d.x for d in zone.desks) * image.width,
+                max(d.y for d in zone.desks) * image.height
+            )
+            self._draw_zone_name(image, zone_name, zbbox)
             self._draw_names(image, zone)
 
-    def _draw_zone_name(self, im: Image.Image, zone: Zone):
+    def _draw_zone_name(self, im: Image.Image, zone_name: str, zbbox: tuple[float]):
         """Draw name of the zone as an overlay"""
-        zbbox = [
-            min(d.x for d in zone.desks) * im.width,
-            min(d.y for d in zone.desks) * im.height,
-            max(d.x for d in zone.desks) * im.width,
-            max(d.y for d in zone.desks) * im.height
-        ]
         a = zbbox[3] - zbbox[1]
         b = zbbox[2] - zbbox[0]
         c = (a ** 2 + b ** 2) ** (1 / 2)
@@ -96,23 +104,23 @@ class ImageHandler:
             while text_length is None or text_length > c:
                 font_size -= 3
                 font = font.font_variant(size=font_size)
-                text_length = d.textlength(zone.name, font)
-            tbbox = d.textbbox((zbbox[0], zbbox[1]), zone.name, font)
+                text_length = d.textlength(zone_name, font)
+            tbbox = d.textbbox((zbbox[0], zbbox[1]), zone_name, font)
             text_a = tbbox[3] - tbbox[1]
             text_b = tbbox[2] - tbbox[0]
             text_x0 = zbbox[0] + (b - text_b) / 2
             text_y0 = zbbox[1] + (a - text_a) / 2
-            d.text((text_x0, text_y0), zone.name, font=font, fill=(128, 128, 128, 64))
+            d.text((text_x0, text_y0), zone_name, font=font, fill=(128, 128, 128, 64))
             txt = txt.rotate(-angle, center=(text_x0 + text_b / 2, text_y0 + text_a / 2))
         else:
             tbbox = tuple()
             while not tbbox or tbbox[2] > zbbox[2] or tbbox[3] > zbbox[3]:
                 font_size -= 3
                 font = font.font_variant(size=font_size)
-                tbbox = d.textbbox((zbbox[0], zbbox[1]), zone.name, font)
+                tbbox = d.textbbox((zbbox[0], zbbox[1]), zone_name, font)
             d.text((zbbox[0] + ((zbbox[2] - zbbox[0]) - (tbbox[2] - tbbox[0])) / 2,
                     zbbox[1] + ((zbbox[3] - zbbox[1]) - (tbbox[3] - tbbox[1])) / 2),
-                   zone.name, font=font, fill=(128, 128, 128, 64))
+                   zone_name, font=font, fill=(128, 128, 128, 64))
 
         im.alpha_composite(txt)
 
