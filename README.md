@@ -39,10 +39,10 @@ python -m pip install -r requirements.txt
 
 ### `book-desk` usage
 #### Linux
-If you want to use automatic bookings with crontab add entries with  `crontab -e`
+If you want to use automatic bookings with crontab add entries with  `crontab -e`. And make sure the relevant config entries are filled.
 
 ```text
-  1 0 * * 1 /path/to/parkanizerer/venv/Sripts/python.exe /path/to/parkanizerer/parkanizerer.py &>> /path/to/parkanizerer/parkanizerer.log
+  1 0 * * 1 /path/to/parkanizerer/venv/bin/python /path/to/parkanizerer/parkanizerer/parkanizerer.py book-desk &>> /path/to/parkanizerer/parkanizerer.log
 ```
 This will run the script on each monday one minute after midnight and it'll book the selected desk for the next week.
 
@@ -50,10 +50,13 @@ This will run the script on each monday one minute after midnight and it'll book
 
 Create a batch file under the name of `parkanizerer.cmd`. Add this line to it and edit the paths to represent your setup.
 ```batch
-/path/to/parkanizerer/venv/Sripts/activate
-/path/to/parkanizerer/parkanizerer.py
+/path/to/parkanizerer/venv/Sripts/activate /path/to/parkanizerer/parkanizerer/parkanizerer.py book-desk
 ```
 Create a shortcut of the newly created file and copy it to the windows Startup folder. You can find this easily by pressing `Win+R` and typing `shell:startup`.
+
+### `generate-map` usage
+Fill the relevant entries in the configuration or check the `--help` page.
+
 
 ## License
 
