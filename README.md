@@ -1,43 +1,59 @@
 
+[![python](https://img.shields.io/badge/Python-3.12-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+
 # Parkanizerer
 
-_A simple tool that books an office desk on [tidaro.com](https://www.tidaro.com) ([parkanizer.com](https://share.parkanizer.com/) before)._
+_A tool that books an office desk on [tidaro.com](https://www.tidaro.com) ([parkanizer.com](https://share.parkanizer.com/) before)._ 
 
-Parkanizer only let's you book a desk 1 week ahead. 
+## Commands
+Check the help page with `parkanizerer.py -h` for parameters
+### `book-desk`
+With this mode you can book desks in advance automatically.
+  - One way you can achive that is by typing weekdays in `config.toml` file. When the script runs it'll check for those days if they are available in tidaro and books them. 
+  - The other way is that you either leave the weekdays field empty or remove it completely. This way when the script runs, it'll book a desk for you in advance for for the current day. This way you can utilize crontab to run it for you.
 
-### Default operation
-Using crontab, this script will run on each weekday when you usually go to the office just after midnight and books the desk for a week later.
+Note that it is greedy, meaning it'll book all days that are available. So if you specify monday, it'll book all mondays that are available in tidaro.
 
-### Selected days operation
-By filling the "days_of_week" array in the config.json file you can select the specific weekdays you wish to book. Keep in mind that monday is the 0th day. If his array is empty execution will fall back to the default operation.
+*Don't forget to release your desk if you decide not to go to the office.*
 
-__Your password will be stored as clear text.__ So make sure that you use one on parkanizer that isn't used elsewhere.
+### `generate-map`
+With this mode you can generate a map of reservations of your collegues. It works by requesting all the employee reservations one by one so it takes a couple of minutes to get all the bookings.
 
-Don't forget to release your desk if you decide not to go to the office.
+It's only useful if the organization doesn't allow you this by default.
 
 ## Installation and Usage
-
-1. Clone this repo
+1. Make sure you have minimum [python 3.12.x](https://www.python.org/downloads/). Check with `python --version`
+2. Clone this repo
 ```bash
 git clone git@github.com:maraid/parkanizerer.git
 ```
-2. Either setup a virtualenv or use the global one. The project only uses the [requests](https://pypi.org/project/requests/) package.
+3. Either setup a virtualenv or use the global one.
 ```bash
+cd parkanizerer
+# create a virtualenv and activate it-
 python -m pip install -r requirements.txt
 ```
 
-3. Setup your configuration by creating `config.json` based on [`config.json.example`](https://github.com/maraid/parkanizerer/blob/master/config.json.example). Log in to parkanizer and check the exact name of the zone and desk that you want to book.
+4. Setup your configuration by creating `config.toml` based on [`config.example.toml`](https://github.com/maraid/parkanizerer/blob/master/config.example.toml). Log in to parkanizer and check the exact name of the zone and desk that you want to book.
 
-4. Add entries to crontab that runs the script when you want to visit the office using `crontab -e`.
 
-e.g:
+### `book-desk` usage
+#### Linux
+If you want to use automatic bookings with crontab add entries with  `crontab -e`
 
 ```text
-  1 0 * * 1 /path/to/parkanizerer/main.py &>> /path/to/parkanizerer/parkanizerer.log
+  1 0 * * 1 /path/to/parkanizerer/venv/Sripts/python.exe /path/to/parkanizerer/parkanizerer.py &>> /path/to/parkanizerer/parkanizerer.log
 ```
 This will run the script on each monday one minute after midnight and it'll book the selected desk for the next week.
 
-5. For windows installation create a shortcut to the parkanizerer.cmd file. Then copy the shortcut to the windows Startup folder. You can find this easily by pressing Win+R and typing "shell:startup".
+#### Windows
+
+Create a batch file under the name of `parkanizerer.cmd`. Add this line to it and edit the paths to represent your setup.
+```batch
+/path/to/parkanizerer/venv/Sripts/activate
+/path/to/parkanizerer/parkanizerer.py
+```
+Create a shortcut of the newly created file and copy it to the windows Startup folder. You can find this easily by pressing `Win+R` and typing `shell:startup`.
 
 ## License
 
