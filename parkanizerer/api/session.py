@@ -24,7 +24,7 @@ class ParkanizerSession:
             self._set_secrets(*(session_secrets.values()))
             self._try_refresh_token()
             logging.info("Successfully authenticated with stored secrets")
-        except (FileNotFoundError, pickle.UnpicklingError, KeyError, EOFError):
+        except (FileNotFoundError, pickle.UnpicklingError, KeyError, EOFError, TypeError):
             logging.info(
                 "Failed to authenticate with stored secrets. Trying with normal login."
             )
