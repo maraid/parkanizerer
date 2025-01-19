@@ -3,13 +3,15 @@ import logging
 import pathlib
 import pickle
 from datetime import datetime, timedelta
+import os
 
 from requests import Session
 
 from . import auth, utils
 
 PARKANIZER_API = "https://share.parkanizer.com/api"
-ROOT_DIR = pathlib.Path(__file__).parents[1].resolve()
+DIR = pathlib.Path(__file__).parents[1].resolve() if os.getenv("RUNNING_IN_DOCKER") is None else pathlib.Path("/config")
+SESSION_SECRET_PATH = DIR / "session_secrets"
 
 
 class ParkanizerSession:
@@ -19,7 +21,7 @@ class ParkanizerSession:
     def login(self, username: str, password: str):
         try:
             logging.info("Trying to authenticate with stored secrets")
-            with open(ROOT_DIR / "session_secrets", "rb") as f:
+            with open(SESSION_SECRET_PATH, "rb") as f:
                 session_secrets = pickle.load(f)
             self._set_secrets(*(session_secrets.values()))
             self._try_refresh_token()
@@ -33,7 +35,7 @@ class ParkanizerSession:
             logging.info("Authenticated with username and password")
             self._set_secrets(*(session_secrets.values()))
 
-        with open(ROOT_DIR / "session_secrets", "wb") as f:
+        with open(SESSION_SECRET_PATH, "wb") as f:
             pickle.dump(session_secrets, f)
 
     def _try_refresh_token(self):

@@ -4,6 +4,7 @@ import argparse
 import logging
 import pathlib
 import sys
+import os
 import tomllib
 
 from api.parkanizer_api import ParkanizerApi
@@ -12,8 +13,8 @@ from book_desk import book_desk
 FORMAT = "%(asctime)s %(message)s"
 logging.basicConfig(format=FORMAT, stream=sys.stdout, level=logging.INFO)
 
-ROOT_DIR = pathlib.Path(__file__).parents[1].resolve()
-DEFAULT_CONFIG_PATH = ROOT_DIR / "config.toml"
+DIR = pathlib.Path(__file__).parents[1].resolve() if os.getenv("RUNNING_IN_DOCKER") is None else pathlib.Path("/config")
+DEFAULT_CONFIG_PATH = DIR / "config.toml"
 
 
 def load_config(config_path):

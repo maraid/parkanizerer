@@ -3,6 +3,7 @@ FROM python:3.13-slim
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
+ENV RUNNING_IN_DOCKER=true
 
 # Set the working directory
 WORKDIR /app
