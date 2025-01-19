@@ -1,8 +1,6 @@
-[credentials]
 username = "someone@example.com"
 password = "SomePassword"
 
-[book-desk]
 # zone: mandatory string
 # has to be exact, as found on the webpage
 zone = "<Zone Name>" 
@@ -14,17 +12,3 @@ desk = "<Desk Name>"
 # weekdays: optional list
 # books 1 or more weeks ahead for the current day of the week if empty or missing
 # weekdays = ["Monday", "Wednesday"]
-
-[generate-map]
-# vip: optinal list
-# The names that are in this list will be marked with a different color
-# Check for accented characters on the parkanizer website
-vip = [
-  "John Doe",
-  "Jane Doe"
-]
-
-# output-directory: optional string
-# If given places the generated maps into the directory specified. './generatedmaps' by default
-# output-directory = /path/to/output/directory
-

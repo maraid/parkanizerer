@@ -1,8 +1,6 @@
 .idea/
 .vscode/
 __pycache__/
-results/
-generated_maps/
 venv/
 config.toml
 session_secrets

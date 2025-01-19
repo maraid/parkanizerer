@@ -1,3 +1,2 @@
 requests
-Pillow
 pip-system-certs>=4.0
